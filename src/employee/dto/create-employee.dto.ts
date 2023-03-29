@@ -1,3 +1,5 @@
+import { Subdivision } from '../../typeorm/entities/subdivision.entity';
+
 export class CreateEmployeeDto {
   readonly id?: number;
   readonly firstName: string;
@@ -9,9 +11,10 @@ export class CreateEmployeeDto {
   readonly createdAt?: Date;
   readonly lastLoginAt?: Date;
   readonly role: string;
-  readonly idSubdivision: string;
+  readonly subdivisionId?: number;
   readonly lastAssessment?: string;
   readonly currentAssessment?: string;
   readonly photo: string;
+  readonly subdivision: Subdivision;
   readonly password: string;
 }

@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Subdivision } from './subdivision.entity';
 
 @Entity()
 export class Employee {
@@ -33,7 +40,7 @@ export class Employee {
   role: string;
 
   @Column({ nullable: true })
-  idSubdivision: string;
+  subdivisionId: number;
 
   @Column({ nullable: true })
   lastAssessment: string;
@@ -46,4 +53,8 @@ export class Employee {
 
   @Column()
   password: string;
+
+  @OneToOne(() => Subdivision)
+  @JoinColumn()
+  subdivision: Subdivision;
 }

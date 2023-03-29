@@ -30,14 +30,11 @@ export class EmployeeController {
     this.employeeService.create(employee);
   }
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.employeeService.remove(id);
+  remove(@Param('id') id: number) {
+    this.employeeService.remove(id);
   }
   @Put(':id')
-  update(
-    @Body() employeeDto: CreateEmployeeDto,
-    @Param('id') id: string,
-  ): Promise<void> {
-    return this.employeeService.update(id, employeeDto);
+  update(@Body() employeeDto: CreateEmployeeDto, @Param('id') id: number) {
+    this.employeeService.update(id, employeeDto);
   }
 }

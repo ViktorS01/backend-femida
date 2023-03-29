@@ -4,10 +4,13 @@ import { AppService } from './app.service';
 import { EmployeeModule } from './employee/employee.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Employee } from './typeorm/entities/employee.entity';
+import { SubdivisionModule } from './subdivision/subdivision.module';
+import { Subdivision } from './typeorm/entities/subdivision.entity';
 
 @Module({
   imports: [
     EmployeeModule,
+    SubdivisionModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -15,7 +18,7 @@ import { Employee } from './typeorm/entities/employee.entity';
       username: 'root',
       password: 'root',
       database: 'femida_database',
-      entities: [Employee],
+      entities: [Employee, Subdivision],
       synchronize: true,
     }),
   ],
