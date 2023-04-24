@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Employee } from './typeorm/entities/employee.entity';
 import { SubdivisionModule } from './subdivision/subdivision.module';
 import { Subdivision } from './typeorm/entities/subdivision.entity';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { Subdivision } from './typeorm/entities/subdivision.entity';
       entities: [Employee, Subdivision],
       synchronize: true,
     }),
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
