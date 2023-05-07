@@ -18,6 +18,12 @@ export class Subdivision {
   @Column({ nullable: true })
   idTopSubdivision: number;
 
+  @Column()
+  subdivisionCurrentAssessment: number;
+
+  @Column()
+  assessmentsCount: number;
+
   @OneToOne(() => Assessment)
   @JoinColumn()
   assessment: Assessment[];

@@ -8,4 +8,6 @@ export class CreateSubdivisionDto {
     id: number;
   };
   readonly assessment?: Assessment[];
+  readonly assessmentsCount: number;
+  readonly subdivisionCurrentAssessment: number;
 }

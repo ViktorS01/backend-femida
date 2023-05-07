@@ -5,6 +5,7 @@ import { CreateSubdivisionDto } from './dto/create-subdivision.dto';
 import { Subdivision } from '../typeorm/entities/subdivision.entity';
 import { Assessment } from '../typeorm/entities/assessment.entity';
 import { Employee } from '../typeorm/entities/employee.entity';
+import { getCurrentAssessment } from '../utils/getCurrentAssessment';
 
 @Injectable()
 export class SubdivisionService {
@@ -34,7 +35,12 @@ export class SubdivisionService {
           });
         assessmentDto.forEach((item) => assessment.push(item));
       }
-      res.push({ ...item, assessment });
+      res.push({
+        ...item,
+        assessment,
+        assessmentsCount: assessment.length,
+        subdivisionCurrentAssessment: getCurrentAssessment(assessment),
+      });
     }
     return res;
   }
@@ -53,7 +59,12 @@ export class SubdivisionService {
         });
       assessmentDto.forEach((item) => assessment.push(item));
     }
-    return { ...subdivisionDto, assessment };
+    return {
+      ...subdivisionDto,
+      assessment,
+      assessmentsCount: assessment.length,
+      subdivisionCurrentAssessment: getCurrentAssessment(assessment),
+    };
   }
 
   async create(subdivisionDto: CreateSubdivisionDto): Promise<Subdivision> {
