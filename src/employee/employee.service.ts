@@ -5,6 +5,7 @@ import { Employee } from '../typeorm/entities/employee.entity';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { Subdivision } from '../typeorm/entities/subdivision.entity';
 import { Assessment } from '../typeorm/entities/assessment.entity';
+import { getCurrentAssessment } from '../utils/getCurrentAssessment';
 
 @Injectable()
 export class EmployeeService {
@@ -33,27 +34,11 @@ export class EmployeeService {
         ...item,
         subdivision: subdivisionDto,
         assessment: assessmentDto,
+        assessmentsCount: assessmentDto.length,
+        employeeCurrentAssessment: getCurrentAssessment(assessmentDto),
       });
     }
     return res;
-  }
-
-  getCurrentAssessment(assessmentDto: Assessment[]): number {
-    // функция посчета средних
-    const res: number[] = assessmentDto.map((item) => {
-      return Math.round(
-        (item.speed +
-          item.respect +
-          item.information +
-          item.teamWork +
-          item.resultWork +
-          item.qualityWork) /
-          6,
-      );
-    });
-    let sum = 0;
-    res.forEach((item) => (sum += item));
-    return Math.round(sum / res.length);
   }
 
   async findOne(id: number): Promise<Employee> {
@@ -75,7 +60,7 @@ export class EmployeeService {
       subdivision: subdivisionDto,
       assessment: assessmentDto,
       assessmentsCount: assessmentDto.length,
-      employeeCurrentAssessment: this.getCurrentAssessment(assessmentDto),
+      employeeCurrentAssessment: getCurrentAssessment(assessmentDto),
     };
   }
 
