@@ -6,6 +6,7 @@ import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { Subdivision } from '../typeorm/entities/subdivision.entity';
 import { Assessment } from '../typeorm/entities/assessment.entity';
 import { getCurrentAssessment } from '../utils/getCurrentAssessment';
+import { SubdivisionService } from '../subdivision/subdivision.service';
 
 @Injectable()
 export class EmployeeService {
@@ -16,16 +17,16 @@ export class EmployeeService {
     private subdivisionRepository: Repository<Subdivision>,
     @InjectRepository(Assessment)
     private assessmentRepository: Repository<Assessment>,
+    private subdivisionService: SubdivisionService,
   ) {}
 
   async findAll(): Promise<Employee[]> {
     const employees: Employee[] = await this.usersRepository.find();
     const res: Employee[] = [];
     for (const item of employees) {
-      const subdivisionDto: Subdivision =
-        await this.subdivisionRepository.findOneBy({
-          id: item.subdivisionId,
-        });
+      const subdivisionDto: Subdivision = await this.subdivisionService.findOne(
+        item.subdivisionId,
+      );
       const assessmentDto: Assessment[] =
         await this.assessmentRepository.findBy({
           idToEmployee: item.id,
@@ -50,10 +51,9 @@ export class EmployeeService {
     employeeDto.subdivisionId = undefined;
     employeeDto.password = undefined;
 
-    const subdivisionDto: Subdivision =
-      await this.subdivisionRepository.findOneBy({
-        id: employeeDto.subdivisionId,
-      });
+    const subdivisionDto: Subdivision = await this.subdivisionService.findOne(
+      employeeDto.subdivisionId,
+    );
 
     return {
       ...employeeDto,
