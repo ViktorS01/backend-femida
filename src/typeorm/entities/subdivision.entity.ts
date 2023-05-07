@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Assessment } from './assessment.entity';
 
 @Entity()
 export class Subdivision {
@@ -10,4 +17,8 @@ export class Subdivision {
 
   @Column({ nullable: true })
   idTopSubdivision: number;
+
+  @OneToOne(() => Assessment)
+  @JoinColumn()
+  assessment: Assessment[];
 }
