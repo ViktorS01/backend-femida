@@ -21,4 +21,10 @@ export class CreateEmployeeDto {
   readonly password: string;
   readonly assessmentsCount: number;
   readonly employeeCurrentAssessment: number;
+  readonly averageSpeed: number;
+  readonly averageInformation: number;
+  readonly averageQualityWork: number;
+  readonly averageResultWork: number;
+  readonly averageTeamWork: number;
+  readonly averageRespect: number;
 }

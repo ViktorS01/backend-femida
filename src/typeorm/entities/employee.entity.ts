@@ -59,6 +59,24 @@ export class Employee {
   employeeCurrentAssessment: number;
 
   @Column()
+  averageSpeed: number;
+
+  @Column()
+  averageInformation: number;
+
+  @Column()
+  averageQualityWork: number;
+
+  @Column()
+  averageResultWork: number;
+
+  @Column()
+  averageTeamWork: number;
+
+  @Column()
+  averageRespect: number;
+
+  @Column()
   assessmentsCount: number;
 
   @OneToOne(() => Subdivision)

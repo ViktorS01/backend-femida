@@ -7,6 +7,7 @@ import { Subdivision } from '../typeorm/entities/subdivision.entity';
 import { Assessment } from '../typeorm/entities/assessment.entity';
 import { getCurrentAssessment } from '../utils/getCurrentAssessment';
 import { SubdivisionService } from '../subdivision/subdivision.service';
+import { getAverageCriteria } from '../utils/getAverageCriteria';
 
 @Injectable()
 export class EmployeeService {
@@ -37,6 +38,24 @@ export class EmployeeService {
         assessment: assessmentDto,
         assessmentsCount: assessmentDto.length,
         employeeCurrentAssessment: getCurrentAssessment(assessmentDto),
+        averageRespect: getAverageCriteria(
+          assessmentDto.map((item) => item.respect),
+        ),
+        averageResultWork: getAverageCriteria(
+          assessmentDto.map((item) => item.resultWork),
+        ),
+        averageQualityWork: getAverageCriteria(
+          assessmentDto.map((item) => item.qualityWork),
+        ),
+        averageTeamWork: getAverageCriteria(
+          assessmentDto.map((item) => item.teamWork),
+        ),
+        averageInformation: getAverageCriteria(
+          assessmentDto.map((item) => item.information),
+        ),
+        averageSpeed: getAverageCriteria(
+          assessmentDto.map((item) => item.speed),
+        ),
       });
     }
     return res;
@@ -61,6 +80,22 @@ export class EmployeeService {
       assessment: assessmentDto,
       assessmentsCount: assessmentDto.length,
       employeeCurrentAssessment: getCurrentAssessment(assessmentDto),
+      averageRespect: getAverageCriteria(
+        assessmentDto.map((item) => item.respect),
+      ),
+      averageResultWork: getAverageCriteria(
+        assessmentDto.map((item) => item.resultWork),
+      ),
+      averageQualityWork: getAverageCriteria(
+        assessmentDto.map((item) => item.qualityWork),
+      ),
+      averageTeamWork: getAverageCriteria(
+        assessmentDto.map((item) => item.teamWork),
+      ),
+      averageInformation: getAverageCriteria(
+        assessmentDto.map((item) => item.information),
+      ),
+      averageSpeed: getAverageCriteria(assessmentDto.map((item) => item.speed)),
     };
   }
 
