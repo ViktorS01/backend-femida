@@ -13,7 +13,9 @@ import {
 import { SubdivisionService } from './subdivision.service';
 import { CreateSubdivisionDto } from './dto/create-subdivision.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('subdivision')
 export class SubdivisionController {
   constructor(private subdivisionService: SubdivisionService) {}

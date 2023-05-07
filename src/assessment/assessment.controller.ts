@@ -13,7 +13,9 @@ import {
 import { AssessmentService } from './assessment.service';
 import { CreateAssessmentDto } from './dto/create-assessment.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('subdivision')
 export class AssessmentController {
   constructor(private assessmentService: AssessmentService) {}

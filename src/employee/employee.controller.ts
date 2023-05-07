@@ -13,7 +13,9 @@ import {
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { EmployeeService } from './employee.service';
 import { AuthGuard } from '../auth/auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('employee')
 export class EmployeeController {
   constructor(private employeeService: EmployeeService) {}

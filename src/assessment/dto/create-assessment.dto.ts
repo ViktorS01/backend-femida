@@ -2,7 +2,9 @@ import { AssessmentCriteria } from '../../typeorm/entities/assessmentCriteria.en
 
 export class CreateAssessmentDto {
   readonly id?: number;
-  readonly idEmployee: number;
+  readonly idFromEmployee: number;
+  readonly idToEmployee: number;
+  readonly comment: string;
   readonly speed: AssessmentCriteria;
   readonly information: AssessmentCriteria;
   readonly qualityWork: AssessmentCriteria;

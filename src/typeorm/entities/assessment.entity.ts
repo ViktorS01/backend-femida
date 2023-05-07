@@ -13,7 +13,13 @@ export class Assessment {
   id: number;
 
   @Column({ nullable: true })
-  idEmployee: number;
+  idFromEmployee: number;
+
+  @Column({ nullable: true })
+  idToEmployee: number;
+
+  @Column({ nullable: true })
+  comment: string;
 
   @OneToOne(() => AssessmentCriteria)
   @JoinColumn()

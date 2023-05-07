@@ -10,6 +10,7 @@ async function bootstrap() {
     .setDescription('Femida API DOC')
     .setVersion('1.0')
     .addTag('femida')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

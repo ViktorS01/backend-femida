@@ -13,7 +13,9 @@ import {
 import { AuthGuard } from '../auth/auth.guard';
 import { CreateAssessmentCriteriaDto } from './dto/create-assessmentCriteria.dto';
 import { AssessmentCriteriaService } from './assessmentCriteria.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('assessmentsCriteria')
 export class AssessmentCriteriaController {
   constructor(private assessmentCriteriaService: AssessmentCriteriaService) {}
