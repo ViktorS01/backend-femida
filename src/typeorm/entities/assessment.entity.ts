@@ -1,11 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
-} from 'typeorm';
-import { AssessmentCriteria } from './assessmentCriteria.entity';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Assessment {
@@ -21,27 +14,21 @@ export class Assessment {
   @Column({ nullable: true })
   comment: string;
 
-  @OneToOne(() => AssessmentCriteria)
-  @JoinColumn()
-  speed: AssessmentCriteria;
+  @Column()
+  speed: number;
 
-  @OneToOne(() => AssessmentCriteria)
-  @JoinColumn()
-  information: AssessmentCriteria;
+  @Column()
+  information: number;
 
-  @OneToOne(() => AssessmentCriteria)
-  @JoinColumn()
-  qualityWork: AssessmentCriteria;
+  @Column()
+  qualityWork: number;
 
-  @OneToOne(() => AssessmentCriteria)
-  @JoinColumn()
-  resultWork: AssessmentCriteria;
+  @Column()
+  resultWork: number;
 
-  @OneToOne(() => AssessmentCriteria)
-  @JoinColumn()
-  teamWork: AssessmentCriteria;
+  @Column()
+  teamWork: number;
 
-  @OneToOne(() => AssessmentCriteria)
-  @JoinColumn()
-  respect: AssessmentCriteria;
+  @Column()
+  respect: number;
 }

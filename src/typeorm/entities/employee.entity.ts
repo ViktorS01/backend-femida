@@ -6,6 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Subdivision } from './subdivision.entity';
+import { Assessment } from './assessment.entity';
 
 @Entity()
 export class Employee {
@@ -57,4 +58,8 @@ export class Employee {
   @OneToOne(() => Subdivision)
   @JoinColumn()
   subdivision: Subdivision;
+
+  @OneToOne(() => Assessment)
+  @JoinColumn()
+  assessment: Assessment[];
 }

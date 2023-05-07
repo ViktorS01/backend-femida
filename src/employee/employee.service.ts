@@ -4,6 +4,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Employee } from '../typeorm/entities/employee.entity';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { Subdivision } from '../typeorm/entities/subdivision.entity';
+import { Assessment } from '../typeorm/entities/assessment.entity';
 
 @Injectable()
 export class EmployeeService {
@@ -12,6 +13,8 @@ export class EmployeeService {
     private usersRepository: Repository<Employee>,
     @InjectRepository(Subdivision)
     private subdivisionRepository: Repository<Subdivision>,
+    @InjectRepository(Assessment)
+    private assessmentRepository: Repository<Assessment>,
   ) {}
 
   async findAll(): Promise<Employee[]> {
@@ -22,13 +25,24 @@ export class EmployeeService {
         await this.subdivisionRepository.findOneBy({
           id: item.subdivisionId,
         });
-      res.push({ ...item, subdivision: subdivisionDto });
+      const assessmentDto: Assessment[] =
+        await this.assessmentRepository.findBy({
+          idToEmployee: item.id,
+        });
+      res.push({
+        ...item,
+        subdivision: subdivisionDto,
+        assessment: assessmentDto,
+      });
     }
     return res;
   }
 
   async findOne(id: number): Promise<Employee> {
     const employeeDto: Employee = await this.usersRepository.findOneBy({ id });
+    const assessmentDto: Assessment[] = await this.assessmentRepository.findBy({
+      idToEmployee: id,
+    });
 
     employeeDto.subdivisionId = undefined;
     employeeDto.password = undefined;
@@ -38,7 +52,11 @@ export class EmployeeService {
         id: employeeDto.subdivisionId,
       });
 
-    return { ...employeeDto, subdivision: subdivisionDto };
+    return {
+      ...employeeDto,
+      subdivision: subdivisionDto,
+      assessment: assessmentDto,
+    };
   }
 
   async create(employeeDto: CreateEmployeeDto): Promise<Employee> {

@@ -6,11 +6,18 @@ import { Employee } from '../typeorm/entities/employee.entity';
 import { SubdivisionService } from '../subdivision/subdivision.service';
 import { Subdivision } from '../typeorm/entities/subdivision.entity';
 import { SubdivisionController } from '../subdivision/subdivision.controller';
+import { Assessment } from '../typeorm/entities/assessment.entity';
+import { AssessmentService } from '../assessment/assessment.service';
+import { AssessmentController } from '../assessment/assessment.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Employee, Subdivision])],
+  imports: [TypeOrmModule.forFeature([Employee, Subdivision, Assessment])],
   exports: [TypeOrmModule],
-  providers: [EmployeeService, SubdivisionService],
-  controllers: [EmployeeController, SubdivisionController],
+  providers: [EmployeeService, SubdivisionService, AssessmentService],
+  controllers: [
+    EmployeeController,
+    SubdivisionController,
+    AssessmentController,
+  ],
 })
 export class EmployeeModule {}
