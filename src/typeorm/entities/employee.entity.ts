@@ -55,6 +55,12 @@ export class Employee {
   @Column()
   password: string;
 
+  @Column()
+  employeeCurrentAssessment: number;
+
+  @Column()
+  assessmentsCount: number;
+
   @OneToOne(() => Subdivision)
   @JoinColumn()
   subdivision: Subdivision;

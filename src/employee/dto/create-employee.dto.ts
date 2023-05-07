@@ -19,4 +19,6 @@ export class CreateEmployeeDto {
   readonly subdivision: Subdivision;
   readonly assessment?: Assessment[];
   readonly password: string;
+  readonly assessmentsCount: number;
+  readonly employeeCurrentAssessment: number;
 }
