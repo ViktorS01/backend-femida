@@ -31,7 +31,7 @@ export class Employee {
   @Column()
   gender: string;
 
-  @Column()
+  @Column({ nullable: true })
   createdAt: Date;
 
   @Column({ nullable: true })
@@ -55,28 +55,28 @@ export class Employee {
   @Column()
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
   employeeCurrentAssessment: number;
 
-  @Column()
+  @Column({ nullable: true })
   averageSpeed: number;
 
-  @Column()
+  @Column({ nullable: true })
   averageInformation: number;
 
-  @Column()
+  @Column({ nullable: true })
   averageQualityWork: number;
 
-  @Column()
+  @Column({ nullable: true })
   averageResultWork: number;
 
-  @Column()
+  @Column({ nullable: true })
   averageTeamWork: number;
 
-  @Column()
+  @Column({ nullable: true })
   averageRespect: number;
 
-  @Column()
+  @Column({ nullable: true })
   assessmentsCount: number;
 
   @OneToOne(() => Subdivision)

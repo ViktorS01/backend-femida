@@ -20,7 +20,11 @@ export class AssessmentService {
   }
 
   async create(assessmentDto: CreateAssessmentDto): Promise<Assessment> {
-    const newAssessment = await this.assessmentRepository.create(assessmentDto);
+    const newAssessment = await this.assessmentRepository.create({
+      ...assessmentDto,
+      createdAt: new Date(),
+    });
+
     return await this.assessmentRepository.save(newAssessment);
   }
 

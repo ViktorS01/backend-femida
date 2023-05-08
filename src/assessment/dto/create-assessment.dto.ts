@@ -9,4 +9,5 @@ export class CreateAssessmentDto {
   readonly resultWork: number;
   readonly teamWork: number;
   readonly respect: number;
+  readonly createdAt?: Date;
 }

@@ -31,4 +31,7 @@ export class Assessment {
 
   @Column()
   respect: number;
+
+  @Column({ nullable: true })
+  createdAt: Date;
 }
