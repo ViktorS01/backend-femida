@@ -6,10 +6,14 @@ import { AuthController } from './auth.controller';
 import { jwtConstants } from './constants';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
+import { EmployeeModule } from '../employee/employee.module';
+import { EmployeeService } from '../employee/employee.service';
+import { SubdivisionService } from '../subdivision/subdivision.service';
 
 @Module({
   imports: [
     UsersModule,
+    EmployeeModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
@@ -18,6 +22,8 @@ import { AuthGuard } from './auth.guard';
   ],
   providers: [
     AuthService,
+    EmployeeService,
+    SubdivisionService,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,

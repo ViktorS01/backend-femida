@@ -33,12 +33,17 @@ export class EmployeeService {
 
   async findOne(id: number): Promise<Employee> {
     const employeeDto: Employee = await this.usersRepository.findOneBy({ id });
+
+    if (!employeeDto) {
+      throw new HttpException(
+        'Employee not found. Cannot delete employee.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const assessmentDto: Assessment[] = await this.assessmentRepository.findBy({
       idToEmployee: id,
     });
-
-    employeeDto.subdivisionId = undefined;
-    employeeDto.password = undefined;
 
     const subdivisionDto: Subdivision = await this.subdivisionService.findOne(
       employeeDto.subdivisionId,
