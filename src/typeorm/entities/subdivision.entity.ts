@@ -24,6 +24,9 @@ export class Subdivision {
   @Column()
   assessmentsCount: number;
 
+  @Column()
+  lastAssessment: number;
+
   @OneToOne(() => Assessment)
   @JoinColumn()
   assessment: Assessment[];

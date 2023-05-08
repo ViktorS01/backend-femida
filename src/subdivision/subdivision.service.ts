@@ -43,6 +43,12 @@ export class SubdivisionService {
         });
       assessmentDto.forEach((item) => assessment.push(item));
     }
+
+    const lastAssArray = assessment.slice();
+    lastAssArray.pop();
+
+    subdivisionDto.lastAssessment = getCurrentAssessment(lastAssArray);
+
     return {
       ...subdivisionDto,
       assessment,
