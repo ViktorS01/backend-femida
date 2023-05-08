@@ -8,5 +8,7 @@ export const getAverageCriteria = (
   const goal = 5;
   const weight = importance / goal;
   const commonGoal = goal * assessmentDto.length;
-  return goal - ((commonGoal - sum) / assessmentDto.length) * weight;
+  return Number(
+    (goal - ((commonGoal - sum) / assessmentDto.length) * weight).toFixed(1),
+  );
 };
