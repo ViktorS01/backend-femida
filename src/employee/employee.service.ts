@@ -36,7 +36,7 @@ export class EmployeeService {
 
     if (!employeeDto) {
       throw new HttpException(
-        'Employee not found. Cannot delete employee.',
+        'Employee not found. Cannot get employee.',
         HttpStatus.BAD_REQUEST,
       );
     }
