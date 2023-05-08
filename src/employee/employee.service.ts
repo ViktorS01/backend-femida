@@ -49,6 +49,12 @@ export class EmployeeService {
       employeeDto.subdivisionId,
     );
 
+    const lastAssArray = assessmentDto.slice().splice(assessmentDto.length - 1);
+
+    employeeDto.password = undefined;
+    employeeDto.subdivisionId = undefined;
+    employeeDto.lastAssessment = getCurrentAssessment(lastAssArray);
+
     return {
       ...employeeDto,
       subdivision: subdivisionDto,

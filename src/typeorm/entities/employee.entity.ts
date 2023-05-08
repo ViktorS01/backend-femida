@@ -34,9 +34,6 @@ export class Employee {
   @Column({ nullable: true })
   createdAt: Date;
 
-  @Column({ nullable: true })
-  lastLoginAt: Date;
-
   @Column()
   role: string;
 
@@ -44,10 +41,7 @@ export class Employee {
   subdivisionId: number;
 
   @Column({ nullable: true })
-  lastAssessment: string;
-
-  @Column({ nullable: true })
-  currentAssessment: string;
+  lastAssessment: number;
 
   @Column({ nullable: true })
   photo: string;
