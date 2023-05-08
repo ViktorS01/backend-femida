@@ -24,7 +24,6 @@ export class AuthService {
   }
 
   async findProfile(id: number): Promise<Employee> {
-    console.log(this.employeeService.findOne(id));
     return this.employeeService.findOne(id);
   }
 }
