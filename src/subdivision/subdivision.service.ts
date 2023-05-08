@@ -23,24 +23,8 @@ export class SubdivisionService {
       await this.subdivisionRepository.find();
     const res: Subdivision[] = [];
     for (const item of subdivisionsDto) {
-      const employeesInSubdivision: Employee[] =
-        await this.employeeRepository.findBy({
-          subdivisionId: item.id,
-        });
-      const assessment: Assessment[] = [];
-      for (const item of employeesInSubdivision) {
-        const assessmentDto: Assessment[] =
-          await this.assessmentRepository.findBy({
-            idToEmployee: item.id,
-          });
-        assessmentDto.forEach((item) => assessment.push(item));
-      }
-      res.push({
-        ...item,
-        assessment,
-        assessmentsCount: assessment.length,
-        subdivisionCurrentAssessment: getCurrentAssessment(assessment),
-      });
+      const a = await this.findOne(item.id);
+      res.push(a);
     }
     return res;
   }

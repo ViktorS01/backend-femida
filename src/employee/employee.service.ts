@@ -25,38 +25,8 @@ export class EmployeeService {
     const employees: Employee[] = await this.usersRepository.find();
     const res: Employee[] = [];
     for (const item of employees) {
-      const subdivisionDto: Subdivision = await this.subdivisionService.findOne(
-        item.subdivisionId,
-      );
-      const assessmentDto: Assessment[] =
-        await this.assessmentRepository.findBy({
-          idToEmployee: item.id,
-        });
-      res.push({
-        ...item,
-        subdivision: subdivisionDto,
-        assessment: assessmentDto,
-        assessmentsCount: assessmentDto.length,
-        employeeCurrentAssessment: getCurrentAssessment(assessmentDto),
-        averageRespect: getAverageCriteria(
-          assessmentDto.map((item) => item.respect),
-        ),
-        averageResultWork: getAverageCriteria(
-          assessmentDto.map((item) => item.resultWork),
-        ),
-        averageQualityWork: getAverageCriteria(
-          assessmentDto.map((item) => item.qualityWork),
-        ),
-        averageTeamWork: getAverageCriteria(
-          assessmentDto.map((item) => item.teamWork),
-        ),
-        averageInformation: getAverageCriteria(
-          assessmentDto.map((item) => item.information),
-        ),
-        averageSpeed: getAverageCriteria(
-          assessmentDto.map((item) => item.speed),
-        ),
-      });
+      const a = await this.findOne(item.id);
+      res.push(a);
     }
     return res;
   }
