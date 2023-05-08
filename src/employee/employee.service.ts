@@ -54,14 +54,16 @@ export class EmployeeService {
 
     employeeDto.password = undefined;
     employeeDto.subdivisionId = undefined;
-    employeeDto.lastAssessment = getCurrentAssessment(lastAssArray);
+    const lastAssessment = getCurrentAssessment(lastAssArray);
+    const employeeCurrentAssessment = getCurrentAssessment(assessmentDto);
 
     return {
       ...employeeDto,
       subdivision: subdivisionDto,
       assessment: assessmentDto,
       assessmentsCount: assessmentDto.length,
-      employeeCurrentAssessment: getCurrentAssessment(assessmentDto),
+      delta: lastAssessment <= employeeCurrentAssessment ? 'up' : 'down',
+      employeeCurrentAssessment,
       averageRespect: getAverageCriteria(
         assessmentDto.map((item) => item.respect),
       ),

@@ -41,7 +41,7 @@ export class Employee {
   subdivisionId: number;
 
   @Column({ nullable: true })
-  lastAssessment: number;
+  delta: string;
 
   @Column({ nullable: true })
   photo: string;

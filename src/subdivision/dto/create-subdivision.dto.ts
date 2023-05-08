@@ -10,5 +10,5 @@ export class CreateSubdivisionDto {
   readonly assessment?: Assessment[];
   readonly assessmentsCount: number;
   readonly subdivisionCurrentAssessment: number;
-  readonly lastAssessment: number;
+  readonly delta: string;
 }

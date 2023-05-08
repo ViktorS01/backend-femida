@@ -47,13 +47,15 @@ export class SubdivisionService {
     const lastAssArray = assessment.slice();
     lastAssArray.pop();
 
-    subdivisionDto.lastAssessment = getCurrentAssessment(lastAssArray);
+    const lastAssessment = getCurrentAssessment(lastAssArray);
+    const subdivisionCurrentAssessment = getCurrentAssessment(assessment);
 
     return {
       ...subdivisionDto,
+      delta: lastAssessment <= subdivisionCurrentAssessment ? 'up' : 'down',
       assessment,
       assessmentsCount: assessment.length,
-      subdivisionCurrentAssessment: getCurrentAssessment(assessment),
+      subdivisionCurrentAssessment,
     };
   }
 

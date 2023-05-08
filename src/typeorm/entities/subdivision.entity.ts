@@ -21,6 +21,9 @@ export class Subdivision {
   @Column()
   subdivisionCurrentAssessment: number;
 
+  @Column({ nullable: true })
+  delta: string;
+
   @Column()
   assessmentsCount: number;
 
