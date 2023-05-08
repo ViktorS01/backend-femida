@@ -10,11 +10,9 @@ export class CreateEmployeeDto {
   readonly profession: string;
   readonly gender: string;
   readonly createdAt?: Date;
-  readonly lastLoginAt?: Date;
   readonly role: string;
   readonly subdivisionId?: number;
-  readonly lastAssessment?: string;
-  readonly currentAssessment?: string;
+  readonly delta?: string;
   readonly photo: string;
   readonly subdivision: Subdivision;
   readonly assessment?: Assessment[];

@@ -21,8 +21,14 @@ export class Subdivision {
   @Column()
   subdivisionCurrentAssessment: number;
 
+  @Column({ nullable: true })
+  delta: string;
+
   @Column()
   assessmentsCount: number;
+
+  @Column()
+  lastAssessment: number;
 
   @OneToOne(() => Assessment)
   @JoinColumn()
