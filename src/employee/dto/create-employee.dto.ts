@@ -25,4 +25,5 @@ export class CreateEmployeeDto {
   readonly averageResultWork: number;
   readonly averageTeamWork: number;
   readonly averageRespect: number;
+  readonly lockTime?: string;
 }

@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { EmployeeService } from './employee.service';
@@ -28,8 +29,8 @@ export class EmployeeController {
 
   @UseGuards(AuthGuard)
   @Get(':id')
-  getOne(@Param('id') id: number) {
-    return this.employeeService.findOne(id);
+  async getOne(@Param('id') id: number, @Request() req) {
+    return this.employeeService.findOne(id, req.user.username);
   }
 
   @UseGuards(AuthGuard)

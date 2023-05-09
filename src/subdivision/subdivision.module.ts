@@ -9,11 +9,17 @@ import { AssessmentController } from '../assessment/assessment.controller';
 import { Employee } from '../typeorm/entities/employee.entity';
 import { EmployeeService } from '../employee/employee.service';
 import { EmployeeController } from '../employee/employee.controller';
+import { UsersService } from '../users/users.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Subdivision, Assessment, Employee])],
   exports: [TypeOrmModule],
-  providers: [SubdivisionService, AssessmentService, EmployeeService],
+  providers: [
+    SubdivisionService,
+    AssessmentService,
+    EmployeeService,
+    UsersService,
+  ],
   controllers: [
     SubdivisionController,
     AssessmentController,
