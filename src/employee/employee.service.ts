@@ -10,7 +10,6 @@ import { SubdivisionService } from '../subdivision/subdivision.service';
 import { getAverageCriteria } from '../utils/getAverageCriteria';
 import { UsersService } from '../users/users.service';
 import { getLockTime } from '../utils/getLockTime';
-import { Importances } from 'src/constants/importances';
 
 @Injectable()
 export class EmployeeService {
@@ -48,7 +47,7 @@ export class EmployeeService {
       );
     }
 
-    const assessmentDto: Assessment[] = await this.assessmentRepository.findBy({
+    const assessments: Assessment[] = await this.assessmentRepository.findBy({
       idToEmployee: id,
     });
 
@@ -56,46 +55,30 @@ export class EmployeeService {
       employeeDto.subdivisionId,
     );
 
-    const lastAssArray = assessmentDto.slice();
+    const lastAssArray = assessments.slice();
     lastAssArray.pop();
 
     employeeDto.password = undefined;
     employeeDto.subdivisionId = undefined;
     const lastAssessment = getCurrentAssessment(lastAssArray);
-    const employeeCurrentAssessment = getCurrentAssessment(assessmentDto);
+    const employeeCurrentAssessment = getCurrentAssessment(assessments);
 
     // подсчет времени, с последний оценки от авторизированого пользователя
-    const assessmentsFromMe = assessmentDto.filter(
-      (item) => item.idFromEmployee === user.userId,
-    );
-    employeeDto.lockTime = getLockTime(assessmentsFromMe);
+    if (user?.userId) {
+      const assessmentsFromMe = assessments.filter(
+        (item) => item.idFromEmployee === user.userId,
+      );
+      employeeDto.lockTime = getLockTime(assessmentsFromMe);
+    }
 
     return {
       ...employeeDto,
       subdivision: subdivisionDto,
-      assessment: assessmentDto,
-      assessmentsCount: assessmentDto.length,
+      assessment: assessments,
+      assessmentsCount: assessments.length,
       delta: lastAssessment <= employeeCurrentAssessment ? 'up' : 'down',
       employeeCurrentAssessment,
-      averageRespect: getAverageCriteria(
-        assessmentDto.map((item) => item.respect, Importances.respect),
-      ),
-      averageResultWork: getAverageCriteria(
-        assessmentDto.map((item) => item.resultWork, Importances.resultWork),
-      ),
-      averageQualityWork: getAverageCriteria(
-        assessmentDto.map((item) => item.qualityWork, Importances.qualityWork),
-      ),
-      averageTeamWork: getAverageCriteria(
-        assessmentDto.map((item) => item.teamWork, Importances.teamWork),
-      ),
-      averageInformation: getAverageCriteria(
-        assessmentDto.map((item) => item.information, Importances.information),
-      ),
-      averageSpeed: getAverageCriteria(
-        assessmentDto.map((item) => item.speed),
-        Importances.speed,
-      ),
+      ...getAverageCriteria(assessments),
     };
   }
 

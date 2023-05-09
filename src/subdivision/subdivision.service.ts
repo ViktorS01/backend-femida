@@ -7,7 +7,6 @@ import { Assessment } from '../typeorm/entities/assessment.entity';
 import { Employee } from '../typeorm/entities/employee.entity';
 import { getCurrentAssessment } from '../utils/getCurrentAssessment';
 import { getAverageCriteria } from 'src/utils/getAverageCriteria';
-import { Importances } from 'src/constants/importances';
 
 @Injectable()
 export class SubdivisionService {
@@ -58,25 +57,7 @@ export class SubdivisionService {
       assessment,
       assessmentsCount: assessment.length,
       subdivisionCurrentAssessment,
-      averageRespect: getAverageCriteria(
-        assessment.map((item) => item.respect, Importances.respect),
-      ),
-      averageResultWork: getAverageCriteria(
-        assessment.map((item) => item.resultWork, Importances.resultWork),
-      ),
-      averageQualityWork: getAverageCriteria(
-        assessment.map((item) => item.qualityWork, Importances.qualityWork),
-      ),
-      averageTeamWork: getAverageCriteria(
-        assessment.map((item) => item.teamWork, Importances.teamWork),
-      ),
-      averageInformation: getAverageCriteria(
-        assessment.map((item) => item.information, Importances.information),
-      ),
-      averageSpeed: getAverageCriteria(
-        assessment.map((item) => item.speed),
-        Importances.speed,
-      ),
+      ...getAverageCriteria(assessment),
     };
   }
 
