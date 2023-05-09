@@ -30,6 +30,24 @@ export class Subdivision {
   @Column()
   lastAssessment: number;
 
+  @Column({ nullable: true })
+  averageSpeed: number;
+
+  @Column({ nullable: true })
+  averageInformation: number;
+
+  @Column({ nullable: true })
+  averageQualityWork: number;
+
+  @Column({ nullable: true })
+  averageResultWork: number;
+
+  @Column({ nullable: true })
+  averageTeamWork: number;
+
+  @Column({ nullable: true })
+  averageRespect: number;
+
   @OneToOne(() => Assessment)
   @JoinColumn()
   assessment: Assessment[];
