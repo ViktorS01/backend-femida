@@ -10,6 +10,7 @@ import { SubdivisionService } from '../subdivision/subdivision.service';
 import { getAverageCriteria } from '../utils/getAverageCriteria';
 import { UsersService } from '../users/users.service';
 import { getLockTime } from '../utils/getLockTime';
+import { Importances } from 'src/constants/importances';
 
 @Injectable()
 export class EmployeeService {
@@ -77,21 +78,24 @@ export class EmployeeService {
       delta: lastAssessment <= employeeCurrentAssessment ? 'up' : 'down',
       employeeCurrentAssessment,
       averageRespect: getAverageCriteria(
-        assessmentDto.map((item) => item.respect),
+        assessmentDto.map((item) => item.respect, Importances.respect),
       ),
       averageResultWork: getAverageCriteria(
-        assessmentDto.map((item) => item.resultWork),
+        assessmentDto.map((item) => item.resultWork, Importances.resultWork),
       ),
       averageQualityWork: getAverageCriteria(
-        assessmentDto.map((item) => item.qualityWork),
+        assessmentDto.map((item) => item.qualityWork, Importances.qualityWork),
       ),
       averageTeamWork: getAverageCriteria(
-        assessmentDto.map((item) => item.teamWork),
+        assessmentDto.map((item) => item.teamWork, Importances.teamWork),
       ),
       averageInformation: getAverageCriteria(
-        assessmentDto.map((item) => item.information),
+        assessmentDto.map((item) => item.information, Importances.information),
       ),
-      averageSpeed: getAverageCriteria(assessmentDto.map((item) => item.speed)),
+      averageSpeed: getAverageCriteria(
+        assessmentDto.map((item) => item.speed),
+        Importances.speed,
+      ),
     };
   }
 

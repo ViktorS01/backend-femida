@@ -11,4 +11,10 @@ export class CreateSubdivisionDto {
   readonly assessmentsCount: number;
   readonly subdivisionCurrentAssessment: number;
   readonly delta: string;
+  readonly averageSpeed: number;
+  readonly averageInformation: number;
+  readonly averageQualityWork: number;
+  readonly averageResultWork: number;
+  readonly averageTeamWork: number;
+  readonly averageRespect: number;
 }

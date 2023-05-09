@@ -1,6 +1,14 @@
-export const getAverageCriteria = (assessmentDto: number[]): number => {
+export const getAverageCriteria = (
+  assessmentDto: number[],
+  importance = 5,
+): number => {
   // функция посчета средних для каждого критерия
   let sum = 0;
   assessmentDto.forEach((item) => (sum += item));
-  return Number((sum / assessmentDto.length).toFixed(1));
+  const goal = 5;
+  const weight = importance / goal;
+  const commonGoal = goal * assessmentDto.length;
+  return Number(
+    (goal - ((commonGoal - sum) / assessmentDto.length) * weight).toFixed(1),
+  );
 };
