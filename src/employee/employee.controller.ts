@@ -10,6 +10,7 @@ import {
   Put,
   UseGuards,
   Request,
+  Query,
 } from '@nestjs/common';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { EmployeeService } from './employee.service';
@@ -23,7 +24,13 @@ export class EmployeeController {
 
   @UseGuards(AuthGuard)
   @Get()
-  getAll(@Request() req) {
+  getAll(@Request() req, @Query() query: { search: string }) {
+    if (query?.search) {
+      return this.employeeService.search(
+        req.user.username,
+        query?.search.toLowerCase(),
+      );
+    }
     return this.employeeService.findAll(req.user.username);
   }
 

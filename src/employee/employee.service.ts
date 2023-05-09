@@ -34,6 +34,27 @@ export class EmployeeService {
     return res;
   }
 
+  async search(username?: string, search?: string): Promise<Employee[]> {
+    const employees: Employee[] = await this.usersRepository.find();
+    const user = await this.usersService.findOne(username);
+
+    const res: Employee[] = [];
+    for (const item of employees) {
+      const employee = await this.findOne(item.id, username);
+      const { lastName, firstName, patronymic } = employee;
+      if (user?.userId != employee?.id) {
+        if (
+          lastName?.toLowerCase().indexOf(search) >= 0 ||
+          firstName?.toLowerCase().indexOf(search) >= 0 ||
+          patronymic?.toLowerCase().indexOf(search) >= 0
+        ) {
+          res.push(employee);
+        }
+      }
+    }
+    return res;
+  }
+
   async findOne(id: number, username?: string): Promise<Employee> {
     const employeeDto: Employee = await this.usersRepository.findOneBy({ id });
 
