@@ -33,6 +33,32 @@ export class AssessmentController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('/employee/:id')
+  getEmployeeHalfYearAssessments(
+    @Param('id') id: number,
+    @Body() { criteria }: { criteria: number },
+  ) {
+    return this.assessmentService.findHalfYearAssessments(
+      id,
+      criteria,
+      'employee',
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/subdivision/:id')
+  getSubdivisionHalfYearAssessments(
+    @Param('id') id: number,
+    @Body() { criteria }: { criteria: number },
+  ) {
+    return this.assessmentService.findHalfYearAssessments(
+      id,
+      criteria,
+      'subdivision',
+    );
+  }
+
+  @UseGuards(AuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() assessment: CreateAssessmentDto) {
