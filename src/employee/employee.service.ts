@@ -24,11 +24,11 @@ export class EmployeeService {
     private usersService: UsersService,
   ) {}
 
-  async findAll(): Promise<Employee[]> {
+  async findAll(username?: string): Promise<Employee[]> {
     const employees: Employee[] = await this.usersRepository.find();
     const res: Employee[] = [];
     for (const item of employees) {
-      const a = await this.findOne(item.id);
+      const a = await this.findOne(item.id, username);
       res.push(a);
     }
     return res;

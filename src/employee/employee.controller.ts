@@ -23,8 +23,8 @@ export class EmployeeController {
 
   @UseGuards(AuthGuard)
   @Get()
-  getAll() {
-    return this.employeeService.findAll();
+  getAll(@Request() req) {
+    return this.employeeService.findAll(req.user.username);
   }
 
   @UseGuards(AuthGuard)
