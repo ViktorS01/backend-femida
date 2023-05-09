@@ -44,6 +44,9 @@ export class Employee {
   delta: string;
 
   @Column({ nullable: true })
+  lockTime: string;
+
+  @Column({ nullable: true })
   photo: string;
 
   @Column()

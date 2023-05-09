@@ -8,6 +8,8 @@ import { Assessment } from '../typeorm/entities/assessment.entity';
 import { getCurrentAssessment } from '../utils/getCurrentAssessment';
 import { SubdivisionService } from '../subdivision/subdivision.service';
 import { getAverageCriteria } from '../utils/getAverageCriteria';
+import { UsersService } from '../users/users.service';
+import { getLockTime } from '../utils/getLockTime';
 import { Importances } from 'src/constants/importances';
 
 @Injectable()
@@ -20,6 +22,7 @@ export class EmployeeService {
     @InjectRepository(Assessment)
     private assessmentRepository: Repository<Assessment>,
     private subdivisionService: SubdivisionService,
+    private usersService: UsersService,
   ) {}
 
   async findAll(): Promise<Employee[]> {
@@ -32,8 +35,11 @@ export class EmployeeService {
     return res;
   }
 
-  async findOne(id: number): Promise<Employee> {
+  async findOne(id: number, username?: string): Promise<Employee> {
     const employeeDto: Employee = await this.usersRepository.findOneBy({ id });
+
+    // получение данных пользователя под которым мы авторизованы
+    const user = await this.usersService.findOne(username);
 
     if (!employeeDto) {
       throw new HttpException(
@@ -57,6 +63,12 @@ export class EmployeeService {
     employeeDto.subdivisionId = undefined;
     const lastAssessment = getCurrentAssessment(lastAssArray);
     const employeeCurrentAssessment = getCurrentAssessment(assessmentDto);
+
+    // подсчет времени, с последний оценки от авторизированого пользователя
+    const assessmentsFromMe = assessmentDto.filter(
+      (item) => item.idFromEmployee === user.userId,
+    );
+    employeeDto.lockTime = getLockTime(assessmentsFromMe);
 
     return {
       ...employeeDto,
