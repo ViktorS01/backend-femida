@@ -4,12 +4,14 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Assessment } from '../typeorm/entities/assessment.entity';
 import { CreateAssessmentDto } from './dto/create-assessment.dto';
 import { getCurrentAssessment } from '../utils/getCurrentAssessment';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AssessmentService {
   constructor(
     @InjectRepository(Assessment)
     private assessmentRepository: Repository<Assessment>,
+    private usersService: UsersService,
   ) {}
 
   findAll(): Promise<Assessment[]> {
@@ -53,9 +55,22 @@ export class AssessmentService {
     return `${id} ${criteria} ${entity}`;
   }
 
-  async create(assessmentDto: CreateAssessmentDto): Promise<Assessment> {
+  async create(
+    assessmentDto: CreateAssessmentDto,
+    username: string,
+  ): Promise<Assessment> {
+    const user = await this.usersService.findOne(username);
+
+    if (!user?.userId) {
+      throw new HttpException(
+        'User not found. Cannot get user.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const newAssessment = await this.assessmentRepository.create({
       ...assessmentDto,
+      idFromEmployee: user.userId,
       createdAt: new Date(),
     });
 

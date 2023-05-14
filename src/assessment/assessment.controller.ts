@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { AssessmentService } from './assessment.service';
@@ -61,8 +62,8 @@ export class AssessmentController {
   @UseGuards(AuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() assessment: CreateAssessmentDto) {
-    this.assessmentService.create(assessment);
+  create(@Body() assessment: CreateAssessmentDto, @Request() req) {
+    this.assessmentService.create(assessment, req.user.username);
   }
 
   @UseGuards(AuthGuard)
