@@ -16,6 +16,7 @@ import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { EmployeeService } from './employee.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Employee } from '../typeorm/entities/employee.entity';
 
 @ApiBearerAuth()
 @Controller('employee')
@@ -32,6 +33,15 @@ export class EmployeeController {
       );
     }
     return this.employeeService.findAll(req.user.username);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/recommendation')
+  async getRecommendation(@Request() req) {
+    const employees: Employee[] = await this.employeeService.findAll(
+      req.user.username,
+    );
+    return employees.filter((item) => !item.lockTime);
   }
 
   @UseGuards(AuthGuard)
