@@ -12,6 +12,12 @@ export class Assessment {
   idToEmployee: number;
 
   @Column({ nullable: true })
+  idFromSubdivision: number;
+
+  @Column({ nullable: true })
+  idToSubdivision: number;
+
+  @Column({ nullable: true })
   comment: string;
 
   @Column()

@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Assessment } from '../typeorm/entities/assessment.entity';
 import { CreateAssessmentDto } from './dto/create-assessment.dto';
-import { getCurrentAssessment } from '../utils/getCurrentAssessment';
 import { UsersService } from '../users/users.service';
+import { groupAssessmentsByMonth } from 'src/utils/groupAssessmentsByMonth';
+import { getCriteriaCoefficient } from 'src/utils/getCriteriaCoefficient';
 
 @Injectable()
 export class AssessmentService {
@@ -31,24 +32,29 @@ export class AssessmentService {
       const assessments: Assessment[] = await this.assessmentRepository.findBy({
         idToEmployee: id,
       });
-      if (criteria === 1) {
-        if (assessments.length) {
-          // вернул среднее за все время
-          // а нужно вернуть среднее за каждый месяц
-          // написать функцию подсчета средних за каждый месяц, за последнее полугодие
-          // assessments[0].createdAt - Date
-          // отсортировать оценки по месяцам и уже внутри каждого месяца посчитать среднее
-          // вернуть HalfYearAssessmentListDTO[]
-          // ОКП - 1,
-          // Скорость - 2,
-          // Надежн. информации - 3,
-          // Качество работы - 4,
-          // Результат работы - 5,
-          // Командная работа - 6,
-          // Уважение и этика - 7
-          const res = getCurrentAssessment(assessments);
-          console.log(res);
-        }
+
+      if (assessments.length) {
+        const halfYear = (1000 * 60 * 60 * 24 * 365.25) / 2;
+
+        const halfYearAssessments: Assessment[] = assessments.filter(
+          (assessment) =>
+            halfYear > +new Date() - +new Date(assessment.createdAt),
+        );
+
+        const groupedAssessments = groupAssessmentsByMonth(halfYearAssessments);
+        const criteriaCoefficient = getCriteriaCoefficient(
+          groupedAssessments,
+          criteria,
+        ).reverse();
+
+        return criteriaCoefficient.map((item, index, arr) => {
+          const buff = arr[index - 1]?.customerOrientationCoefficient || 0;
+
+          return {
+            ...item,
+            delta: item.customerOrientationCoefficient >= buff ? 'up' : 'down',
+          };
+        });
       }
       return `${id} ${criteria} ${entity}`;
     }
