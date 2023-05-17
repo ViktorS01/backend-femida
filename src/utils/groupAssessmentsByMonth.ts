@@ -1,4 +1,5 @@
-import { CriteriasMonthDTO, Month } from 'src/assessment/dto/types';
+import { CriteriasMonthDTO } from 'src/assessment/dto/types';
+import { criterias } from 'src/constants/criterias';
 import { monthNames } from 'src/constants/monthNames';
 import { Assessment } from 'src/typeorm/entities/assessment.entity';
 
@@ -31,13 +32,9 @@ export const groupAssessmentsByMonth = (halfYearAssessments: Assessment[]) => {
   halfYearAssessments.forEach((assessment) => {
     const property = `${monthNames[new Date(assessment.createdAt).getMonth()]}`;
 
-    //TODO: это полная *&^%$#@!. переделать
-    halfYearCriterias[property].speed.push(assessment.speed);
-    halfYearCriterias[property].information.push(assessment.information);
-    halfYearCriterias[property].qualityWork.push(assessment.qualityWork);
-    halfYearCriterias[property].resultWork.push(assessment.resultWork);
-    halfYearCriterias[property].teamWork.push(assessment.teamWork);
-    halfYearCriterias[property].respect.push(assessment.respect);
+    criterias.forEach((value) => {
+      halfYearCriterias[property][value].push(assessment[value]);
+    });
   });
   return halfYearCriterias;
 };
