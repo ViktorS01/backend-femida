@@ -6,6 +6,7 @@ import { CreateAssessmentDto } from './dto/create-assessment.dto';
 import { UsersService } from '../users/users.service';
 import { groupAssessmentsByMonth } from 'src/utils/groupAssessmentsByMonth';
 import { getCriteriaCoefficient } from 'src/utils/getCriteriaCoefficient';
+import { EmployeeService } from '../employee/employee.service';
 
 @Injectable()
 export class AssessmentService {
@@ -13,6 +14,7 @@ export class AssessmentService {
     @InjectRepository(Assessment)
     private assessmentRepository: Repository<Assessment>,
     private usersService: UsersService,
+    private employeeService: EmployeeService,
   ) {}
 
   findAll(): Promise<Assessment[]> {
@@ -28,37 +30,37 @@ export class AssessmentService {
     criteria: number,
     entity: 'employee' | 'subdivision',
   ): Promise<any> {
+    let assessments: Assessment[];
     if (entity === 'employee') {
-      const assessments: Assessment[] = await this.assessmentRepository.findBy({
+      assessments = await this.assessmentRepository.findBy({
         idToEmployee: id,
       });
-
-      if (assessments.length) {
-        const halfYear = (1000 * 60 * 60 * 24 * 365.25) / 2;
-
-        const halfYearAssessments: Assessment[] = assessments.filter(
-          (assessment) =>
-            halfYear > +new Date() - +new Date(assessment.createdAt),
-        );
-
-        const groupedAssessments = groupAssessmentsByMonth(halfYearAssessments);
-        const criteriaCoefficient = getCriteriaCoefficient(
-          groupedAssessments,
-          criteria,
-        ).reverse();
-
-        return criteriaCoefficient.map((item, index, arr) => {
-          const buff = arr[index - 1]?.customerOrientationCoefficient || 0;
-
-          return {
-            ...item,
-            delta: item.customerOrientationCoefficient >= buff ? 'up' : 'down',
-          };
-        });
-      }
-      return `${id} ${criteria} ${entity}`;
+    } else {
+      assessments = await this.assessmentRepository.findBy({
+        idToSubdivision: id,
+      });
     }
-    return `${id} ${criteria} ${entity}`;
+
+    const halfYear = (1000 * 60 * 60 * 24 * 365.25) / 2;
+
+    const halfYearAssessments: Assessment[] = assessments.filter(
+      (assessment) => halfYear > +new Date() - +new Date(assessment.createdAt),
+    );
+
+    const groupedAssessments = groupAssessmentsByMonth(halfYearAssessments);
+    const criteriaCoefficient = getCriteriaCoefficient(
+      groupedAssessments,
+      criteria,
+    ).reverse();
+
+    return criteriaCoefficient.map((item, index, arr) => {
+      const buff = arr[index - 1]?.customerOrientationCoefficient || 0;
+
+      return {
+        ...item,
+        delta: item.customerOrientationCoefficient >= buff ? 'up' : 'down',
+      };
+    });
   }
 
   async create(
@@ -73,11 +75,18 @@ export class AssessmentService {
         HttpStatus.BAD_REQUEST,
       );
     }
+    const fromEmployee = await this.employeeService.findOne(user.userId);
+
+    const toEmployee = await this.employeeService.findOne(
+      assessmentDto.idToEmployee,
+    );
 
     const newAssessment = await this.assessmentRepository.create({
       ...assessmentDto,
       idFromEmployee: user.userId,
       createdAt: new Date(),
+      idFromSubdivision: fromEmployee.subdivision.id,
+      idToSubdivision: toEmployee.subdivision.id,
     });
 
     return await this.assessmentRepository.save(newAssessment);
