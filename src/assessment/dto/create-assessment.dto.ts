@@ -2,6 +2,8 @@ export class CreateAssessmentDto {
   readonly id?: number;
   readonly idFromEmployee: number;
   readonly idToEmployee: number;
+  readonly idFromSubdivision?: number;
+  readonly idToSubdivision?: number;
   readonly comment: string;
   readonly speed: number;
   readonly information: number;

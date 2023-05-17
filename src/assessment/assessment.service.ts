@@ -42,8 +42,19 @@ export class AssessmentService {
         );
 
         const groupedAssessments = groupAssessmentsByMonth(halfYearAssessments);
+        const criteriaCoefficient = getCriteriaCoefficient(
+          groupedAssessments,
+          criteria,
+        ).reverse();
 
-        return getCriteriaCoefficient(groupedAssessments, criteria);
+        return criteriaCoefficient.map((item, index, arr) => {
+          const buff = arr[index - 1]?.customerOrientationCoefficient || 0;
+
+          return {
+            ...item,
+            delta: item.customerOrientationCoefficient >= buff ? 'up' : 'down',
+          };
+        });
       }
       return `${id} ${criteria} ${entity}`;
     }

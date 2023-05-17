@@ -1,57 +1,43 @@
+import { CriteriasMonthDTO, Month } from 'src/assessment/dto/types';
+import { monthNames } from 'src/constants/monthNames';
 import { Assessment } from 'src/typeorm/entities/assessment.entity';
 
-type MonthAssessment = {
-  speed: number[];
-  information: number[];
-  qualityWork: number[];
-  resultWork: number[];
-  teamWork: number[];
-  respect: number[];
-};
-
 //TODO: добавить че возвращает
-export const groupAssessmentsByMonth = (assessments: Assessment[]) => {
-  const createMonthAssessment = (): MonthAssessment => {
-    return {
-      speed: [],
-      information: [],
-      qualityWork: [],
-      resultWork: [],
-      teamWork: [],
-      respect: [],
-    };
+export const groupAssessmentsByMonth = (halfYearAssessments: Assessment[]) => {
+  const createHalfYearCriterias = (): Partial<CriteriasMonthDTO> => {
+    const date = new Date();
+    const halfYearCriterias: Partial<CriteriasMonthDTO> = {};
+
+    for (let i = 0; i < 6; i++) {
+      const currentMonth = date.getMonth();
+
+      halfYearCriterias[monthNames[currentMonth]] = {
+        speed: [],
+        information: [],
+        qualityWork: [],
+        resultWork: [],
+        teamWork: [],
+        respect: [],
+      };
+
+      date.setMonth(currentMonth - 1, 1);
+    }
+    return halfYearCriterias;
   };
 
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+  const halfYearCriterias: Partial<CriteriasMonthDTO> =
+    createHalfYearCriterias();
 
-  const halfYearAssessments = {};
-
-  assessments.forEach((assessment) => {
+  halfYearAssessments.forEach((assessment) => {
     const property = `${monthNames[new Date(assessment.createdAt).getMonth()]}`;
-    if (!halfYearAssessments[property]) {
-      halfYearAssessments[property] = createMonthAssessment();
-    }
 
     //TODO: это полная *&^%$#@!. переделать
-    halfYearAssessments[property].speed.push(assessment.speed);
-    halfYearAssessments[property].information.push(assessment.information);
-    halfYearAssessments[property].qualityWork.push(assessment.qualityWork);
-    halfYearAssessments[property].resultWork.push(assessment.resultWork);
-    halfYearAssessments[property].teamWork.push(assessment.teamWork);
-    halfYearAssessments[property].respect.push(assessment.respect);
+    halfYearCriterias[property].speed.push(assessment.speed);
+    halfYearCriterias[property].information.push(assessment.information);
+    halfYearCriterias[property].qualityWork.push(assessment.qualityWork);
+    halfYearCriterias[property].resultWork.push(assessment.resultWork);
+    halfYearCriterias[property].teamWork.push(assessment.teamWork);
+    halfYearCriterias[property].respect.push(assessment.respect);
   });
-  return halfYearAssessments;
+  return halfYearCriterias;
 };
