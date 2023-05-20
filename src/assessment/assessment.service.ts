@@ -1,3 +1,4 @@
+import { SubdivisionService } from './../subdivision/subdivision.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
@@ -7,6 +8,9 @@ import { UsersService } from '../users/users.service';
 import { groupAssessmentsByMonth } from 'src/utils/groupAssessmentsByMonth';
 import { getCriteriaCoefficient } from 'src/utils/getCriteriaCoefficient';
 import { EmployeeService } from '../employee/employee.service';
+import { Comment, Entity } from './dto/types';
+import { Subdivision } from 'src/typeorm/entities/subdivision.entity';
+import { getCurrentAssessment } from 'src/utils/getCurrentAssessment';
 
 @Injectable()
 export class AssessmentService {
@@ -15,6 +19,7 @@ export class AssessmentService {
     private assessmentRepository: Repository<Assessment>,
     private usersService: UsersService,
     private employeeService: EmployeeService,
+    private subdivisionService: SubdivisionService,
   ) {}
 
   findAll(): Promise<Assessment[]> {
@@ -25,10 +30,38 @@ export class AssessmentService {
     return this.assessmentRepository.findOneBy({ id });
   }
 
+  async getCommentsById(id: number, entity: Entity): Promise<any> {
+    // TODO: типизировать
+    let assessments: Assessment[];
+    if (entity === 'employee') {
+      assessments = await this.assessmentRepository.findBy({
+        idToEmployee: id,
+      });
+    } else {
+      assessments = await this.assessmentRepository.findBy({
+        idToSubdivision: id,
+      });
+    }
+
+    const comments: Comment[] = [];
+
+    for (const assessment of assessments) {
+      const subdivision: Subdivision = await this.subdivisionService.findOne(
+        Number(assessment.idFromSubdivision),
+      );
+      comments.push({
+        ...assessment,
+        currentAssessment: getCurrentAssessment([assessment]),
+        subdivisionName: subdivision.name,
+      });
+    }
+    return comments;
+  }
+
   async findHalfYearAssessments(
     id: number,
     criteria: number,
-    entity: 'employee' | 'subdivision',
+    entity: Entity,
   ): Promise<any> {
     let assessments: Assessment[];
     if (entity === 'employee') {
