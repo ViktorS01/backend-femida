@@ -31,7 +31,8 @@ export class SubdivisionService {
   }
 
   async findOne(id: number): Promise<Subdivision> {
-    const subdivisionDto = await this.subdivisionRepository.findOneBy({ id });
+    const subdivisionDto: Subdivision =
+      await this.subdivisionRepository.findOneBy({ id });
     const employeesInSubdivision: Employee[] =
       await this.employeeRepository.findBy({
         subdivisionId: subdivisionDto.id,

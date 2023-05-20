@@ -79,8 +79,6 @@ export class EmployeeService {
     const lastAssArray = assessments.slice();
     lastAssArray.pop();
 
-    employeeDto.password = undefined;
-    employeeDto.subdivisionId = undefined;
     const lastAssessment = getCurrentAssessment(lastAssArray);
     const employeeCurrentAssessment = getCurrentAssessment(assessments);
 
