@@ -58,6 +58,8 @@ export class SubdivisionService {
       assessment,
       assessmentsCount: assessment.length,
       subdivisionCurrentAssessment,
+      employees: employeesInSubdivision,
+      employeeCount: employeesInSubdivision.length,
       ...getAverageCriteria(assessment),
     };
   }

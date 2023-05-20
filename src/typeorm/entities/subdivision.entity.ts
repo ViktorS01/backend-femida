@@ -6,6 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Assessment } from './assessment.entity';
+import { Employee } from './employee.entity';
 
 @Entity()
 export class Subdivision {
@@ -29,6 +30,13 @@ export class Subdivision {
 
   @Column()
   lastAssessment: number;
+
+  @Column()
+  employeeCount: number;
+
+  @OneToOne(() => Assessment)
+  @JoinColumn()
+  employees: Employee[];
 
   @Column({ nullable: true })
   averageSpeed: number;
