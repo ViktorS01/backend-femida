@@ -10,6 +10,7 @@ import {
   Put,
   Request,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { AssessmentService } from './assessment.service';
 import { CreateAssessmentDto } from './dto/create-assessment.dto';
@@ -62,7 +63,7 @@ export class AssessmentController {
 
   @UseGuards(AuthGuard)
   @Get('/comments/:id')
-  getComments(@Param('id') id: number, @Body() { entity }: { entity: Entity }) {
+  getComments(@Param('id') id: number, @Query('entity') entity: Entity) {
     return this.assessmentService.getCommentsById(id, entity);
   }
 
