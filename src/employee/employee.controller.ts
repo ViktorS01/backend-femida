@@ -38,7 +38,7 @@ export class EmployeeController {
   @UseGuards(AuthGuard)
   @Get('/recommendation')
   async getRecommendation(@Request() req) {
-    const employees: Employee[] = await this.employeeService.findAll(
+    const employees: Employee[] = await this.employeeService.reccomendation(
       req.user.username,
     );
     return employees.filter((item) => !item.lockTime);

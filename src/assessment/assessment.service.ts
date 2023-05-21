@@ -7,6 +7,12 @@ import { UsersService } from '../users/users.service';
 import { groupAssessmentsByMonth } from 'src/utils/groupAssessmentsByMonth';
 import { getCriteriaCoefficient } from 'src/utils/getCriteriaCoefficient';
 import { EmployeeService } from '../employee/employee.service';
+import {
+  AssessmentsFromSubdivision,
+  HalfYearAssessmentListDTO,
+} from './dto/types';
+import { getCurrentAssessment } from '../utils/getCurrentAssessment';
+import { SubdivisionService } from '../subdivision/subdivision.service';
 
 @Injectable()
 export class AssessmentService {
@@ -15,6 +21,7 @@ export class AssessmentService {
     private assessmentRepository: Repository<Assessment>,
     private usersService: UsersService,
     private employeeService: EmployeeService,
+    private subdivisionService: SubdivisionService,
   ) {}
 
   findAll(): Promise<Assessment[]> {
@@ -27,9 +34,9 @@ export class AssessmentService {
 
   async findHalfYearAssessments(
     id: number,
-    criteria: number,
+    criteria = 1,
     entity: 'employee' | 'subdivision',
-  ): Promise<any> {
+  ): Promise<HalfYearAssessmentListDTO[]> {
     let assessments: Assessment[];
     if (entity === 'employee') {
       assessments = await this.assessmentRepository.findBy({
@@ -61,6 +68,45 @@ export class AssessmentService {
         delta: item.customerOrientationCoefficient >= buff ? 'up' : 'down',
       };
     });
+  }
+
+  async findFunctionAssessmentList(username: string): Promise<any> {
+    const user = await this.usersService.findOne(username);
+
+    if (!user?.userId) {
+      throw new HttpException(
+        'User not found. Cannot get user.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const assessments: Assessment[] = await this.assessmentRepository.findBy({
+      idToEmployee: user.userId,
+    });
+
+    let fromSubdivisionId: number[] = [];
+    assessments.forEach((item) => {
+      fromSubdivisionId.push(item.idFromSubdivision);
+    });
+    fromSubdivisionId = [...new Set(fromSubdivisionId)];
+
+    const assessmentsFromSubdivisionArray: AssessmentsFromSubdivision[] = [];
+
+    for (const subId of fromSubdivisionId) {
+      const ass: Assessment[] = assessments.filter((item) => {
+        return item.idFromSubdivision === subId;
+      });
+      if (ass.length) {
+        const currentSubdivision = await this.subdivisionService.findOne(
+          ass[0].idFromSubdivision,
+        );
+        assessmentsFromSubdivisionArray.push({
+          name: currentSubdivision.name,
+          value: getCurrentAssessment(ass),
+        });
+      }
+    }
+
+    return assessmentsFromSubdivisionArray;
   }
 
   async create(

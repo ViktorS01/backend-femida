@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
   JoinColumn,
+  ManyToMany,
 } from 'typeorm';
 import { Subdivision } from './subdivision.entity';
 import { Assessment } from './assessment.entity';
@@ -49,7 +50,7 @@ export class Employee {
   @Column({ nullable: true })
   photo: string;
 
-  @Column()
+  @Column({ nullable: true })
   password: string;
 
   @Column({ nullable: true })
@@ -76,7 +77,7 @@ export class Employee {
   @Column({ nullable: true })
   assessmentsCount: number;
 
-  @OneToOne(() => Subdivision)
+  @ManyToMany(() => Subdivision)
   @JoinColumn()
   subdivision: Subdivision;
 

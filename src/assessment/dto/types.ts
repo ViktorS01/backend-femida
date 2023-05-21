@@ -4,8 +4,8 @@ import { monthNames } from 'src/constants/monthNames';
 type HalfYearAssessmentListDTO = {
   month: string;
   customerOrientationCoefficient: number;
-  delta?: 'up' | 'down';
-  assessmentCount?: number;
+  delta?: Delta;
+  assessmentCount: number;
 };
 
 type Criteria = (typeof criterias)[number];
@@ -23,10 +23,18 @@ type MonthAssessment = {
 
 type CriteriasMonthDTO = Record<Month, MonthAssessment>;
 
+type Delta = 'up' | 'down';
+
+type AssessmentsFromSubdivision = {
+  name: string;
+  value: number;
+};
+
 export type {
   HalfYearAssessmentListDTO,
   Criteria,
   Month,
   MonthAssessment,
   CriteriasMonthDTO,
+  AssessmentsFromSubdivision,
 };

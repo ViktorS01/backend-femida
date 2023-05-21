@@ -19,19 +19,19 @@ export class Subdivision {
   @Column({ nullable: true })
   idTopSubdivision: number;
 
-  @Column()
+  @Column({ nullable: true })
   subdivisionCurrentAssessment: number;
 
   @Column({ nullable: true })
   delta: string;
 
-  @Column()
+  @Column({ nullable: true })
   assessmentsCount: number;
 
-  @Column()
+  @Column({ nullable: true })
   lastAssessment: number;
 
-  @Column()
+  @Column({ nullable: true })
   employeeCount: number;
 
   @OneToOne(() => Assessment)
