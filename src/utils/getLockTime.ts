@@ -17,9 +17,9 @@ export const getLockTime = (assessmentsFromMe: Assessment[]): string | null => {
   if (hours >= 24) {
     return null;
   } else {
-    const reverseMinutes = String(60 - minutes).padStart(2, '0');
+    const reverseMinutes = String(59 - minutes).padStart(2, '0');
     const reverseHours = String(23 - hours).padStart(2, '0');
-    const reverseSeconds = String(60 - seconds).padStart(2, '0');
+    const reverseSeconds = String(59 - seconds).padStart(2, '0');
     return `${reverseHours}:${reverseMinutes}:${reverseSeconds}`;
   }
 };
