@@ -36,10 +36,16 @@ export class AssessmentController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('/function/subdivision')
+  getFunctionAssessmentList(@Request() req) {
+    return this.assessmentService.findFunctionAssessmentList(req.user.username);
+  }
+
+  @UseGuards(AuthGuard)
   @Get('/employee/:id')
   getEmployeeHalfYearAssessments(
     @Param('id') id: number,
-    @Body() { criteria }: { criteria: number },
+    @Query('criteria') criteria: number,
   ) {
     return this.assessmentService.findHalfYearAssessments(
       id,
@@ -52,7 +58,7 @@ export class AssessmentController {
   @Get('/subdivision/:id')
   getSubdivisionHalfYearAssessments(
     @Param('id') id: number,
-    @Body() { criteria }: { criteria: number },
+    @Query('criteria') criteria: number,
   ) {
     return this.assessmentService.findHalfYearAssessments(
       id,

@@ -1,4 +1,4 @@
-import { SubdivisionService } from './../subdivision/subdivision.service';
+import { SubdivisionService } from '../subdivision/subdivision.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
@@ -8,9 +8,13 @@ import { UsersService } from '../users/users.service';
 import { groupAssessmentsByMonth } from 'src/utils/groupAssessmentsByMonth';
 import { getCriteriaCoefficient } from 'src/utils/getCriteriaCoefficient';
 import { EmployeeService } from '../employee/employee.service';
+import {
+  AssessmentsFromSubdivision,
+  HalfYearAssessmentListDTO,
+} from './dto/types';
+import { getCurrentAssessment } from '../utils/getCurrentAssessment';
 import { Comment, Entity } from './dto/types';
 import { Subdivision } from 'src/typeorm/entities/subdivision.entity';
-import { getCurrentAssessment } from 'src/utils/getCurrentAssessment';
 
 @Injectable()
 export class AssessmentService {
@@ -30,8 +34,7 @@ export class AssessmentService {
     return this.assessmentRepository.findOneBy({ id });
   }
 
-  async getCommentsById(id: number, entity: Entity): Promise<any> {
-    // TODO: типизировать
+  async getCommentsById(id: number, entity: Entity): Promise<Comment[]> {
     let assessments: Assessment[];
     if (entity === 'employee') {
       assessments = await this.assessmentRepository.findBy({
@@ -60,9 +63,9 @@ export class AssessmentService {
 
   async findHalfYearAssessments(
     id: number,
-    criteria: number,
+    criteria = 1,
     entity: Entity,
-  ): Promise<any> {
+  ): Promise<HalfYearAssessmentListDTO[]> {
     let assessments: Assessment[];
     if (entity === 'employee') {
       assessments = await this.assessmentRepository.findBy({
@@ -94,6 +97,47 @@ export class AssessmentService {
         delta: item.customerOrientationCoefficient >= buff ? 'up' : 'down',
       };
     });
+  }
+
+  async findFunctionAssessmentList(
+    username: string,
+  ): Promise<AssessmentsFromSubdivision[]> {
+    const user = await this.usersService.findOne(username);
+
+    if (!user?.userId) {
+      throw new HttpException(
+        'User not found. Cannot get user.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const assessments: Assessment[] = await this.assessmentRepository.findBy({
+      idToEmployee: user.userId,
+    });
+
+    let fromSubdivisionId: number[] = [];
+    assessments.forEach((item) => {
+      fromSubdivisionId.push(item.idFromSubdivision);
+    });
+    fromSubdivisionId = [...new Set(fromSubdivisionId)];
+
+    const assessmentsFromSubdivisionArray: AssessmentsFromSubdivision[] = [];
+
+    for (const subId of fromSubdivisionId) {
+      const ass: Assessment[] = assessments.filter((item) => {
+        return item.idFromSubdivision === subId;
+      });
+      if (ass.length) {
+        const currentSubdivision = await this.subdivisionService.findOne(
+          ass[0].idFromSubdivision,
+        );
+        assessmentsFromSubdivisionArray.push({
+          name: currentSubdivision.name,
+          value: getCurrentAssessment(ass),
+        });
+      }
+    }
+
+    return assessmentsFromSubdivisionArray;
   }
 
   async create(

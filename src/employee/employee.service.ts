@@ -55,6 +55,19 @@ export class EmployeeService {
     return res;
   }
 
+  async reccomendation(username?: string): Promise<Employee[]> {
+    const employees: Employee[] = await this.usersRepository.find();
+    const user = await this.usersService.findOne(username);
+    const res: Employee[] = [];
+    for (const item of employees) {
+      const employee = await this.findOne(item.id, username);
+      if (user?.userId != employee?.id) {
+        res.push(employee);
+      }
+    }
+    return res;
+  }
+
   async findOne(id: number, username?: string): Promise<Employee> {
     const employeeDto: Employee = await this.usersRepository.findOneBy({ id });
 

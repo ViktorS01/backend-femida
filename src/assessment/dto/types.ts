@@ -1,4 +1,3 @@
-import { getCurrentAssessment } from './../../utils/getCurrentAssessment';
 import { criterias } from 'src/constants/criterias';
 import { monthNames } from 'src/constants/monthNames';
 import { Assessment } from 'src/typeorm/entities/assessment.entity';
@@ -6,8 +5,8 @@ import { Assessment } from 'src/typeorm/entities/assessment.entity';
 type HalfYearAssessmentListDTO = {
   month: string;
   customerOrientationCoefficient: number;
-  delta?: 'up' | 'down';
-  assessmentCount?: number;
+  delta?: Delta;
+  assessmentCount: number;
 };
 
 type Criteria = (typeof criterias)[number];
@@ -32,12 +31,20 @@ type Comment = Assessment & {
   currentAssessment: number;
 };
 
+type Delta = 'up' | 'down';
+
+type AssessmentsFromSubdivision = {
+  name: string;
+  value: number;
+};
+
 export type {
   HalfYearAssessmentListDTO,
   Criteria,
   Month,
   MonthAssessment,
   CriteriasMonthDTO,
+  AssessmentsFromSubdivision,
   Entity,
   Comment,
 };
