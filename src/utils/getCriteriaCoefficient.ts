@@ -16,7 +16,7 @@ export const getCriteriaCoefficient = (
 
   const res: HalfYearAssessmentListDTO[] = [];
 
-  if (criteria === 1) {
+  if (criteria == 1) {
     for (const month in groupedAssessments) {
       let sum = 0;
       let assessmentCount = 0;
