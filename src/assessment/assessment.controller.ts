@@ -37,8 +37,11 @@ export class AssessmentController {
 
   @UseGuards(AuthGuard)
   @Get('/function/subdivision')
-  getFunctionAssessmentList(@Request() req) {
-    return this.assessmentService.findFunctionAssessmentList(req.user.username);
+  getFunctionAssessmentList(@Request() req, @Query('id') id: string) {
+    return this.assessmentService.findFunctionAssessmentList(
+      req.user.username,
+      id,
+    );
   }
 
   @UseGuards(AuthGuard)

@@ -101,6 +101,7 @@ export class AssessmentService {
 
   async findFunctionAssessmentList(
     username: string,
+    idUser?: string,
   ): Promise<AssessmentsFromSubdivision[]> {
     const user = await this.usersService.findOne(username);
 
@@ -110,9 +111,16 @@ export class AssessmentService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const assessments: Assessment[] = await this.assessmentRepository.findBy({
-      idToEmployee: user.userId,
-    });
+    let assessments: Assessment[];
+    if (idUser) {
+      assessments = await this.assessmentRepository.findBy({
+        idToEmployee: Number(idUser),
+      });
+    } else {
+      assessments = await this.assessmentRepository.findBy({
+        idToEmployee: user.userId,
+      });
+    }
 
     let fromSubdivisionId: number[] = [];
     assessments.forEach((item) => {
