@@ -45,7 +45,7 @@ export class AssessmentController {
   @Get('/employee/:id')
   getEmployeeHalfYearAssessments(
     @Param('id') id: number,
-    @Param('criteria') criteria: number,
+    @Query('criteria') criteria: number,
   ) {
     return this.assessmentService.findHalfYearAssessments(
       id,
