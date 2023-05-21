@@ -1,5 +1,6 @@
 import { criterias } from 'src/constants/criterias';
 import { monthNames } from 'src/constants/monthNames';
+import { Assessment } from 'src/typeorm/entities/assessment.entity';
 
 type HalfYearAssessmentListDTO = {
   month: string;
@@ -23,6 +24,13 @@ type MonthAssessment = {
 
 type CriteriasMonthDTO = Record<Month, MonthAssessment>;
 
+type Entity = 'subdivision' | 'employee';
+
+type Comment = Assessment & {
+  subdivisionName: string;
+  currentAssessment: number;
+};
+
 type Delta = 'up' | 'down';
 
 type AssessmentsFromSubdivision = {
@@ -37,4 +45,6 @@ export type {
   MonthAssessment,
   CriteriasMonthDTO,
   AssessmentsFromSubdivision,
+  Entity,
+  Comment,
 };

@@ -8,14 +8,15 @@ import {
   Param,
   Post,
   Put,
-  Query,
   Request,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { AssessmentService } from './assessment.service';
 import { CreateAssessmentDto } from './dto/create-assessment.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Entity } from './dto/types';
 
 @ApiBearerAuth()
 @Controller('assessment')
@@ -64,6 +65,12 @@ export class AssessmentController {
       criteria,
       'subdivision',
     );
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/comments/:id')
+  getComments(@Param('id') id: number, @Query('entity') entity: Entity) {
+    return this.assessmentService.getCommentsById(id, entity);
   }
 
   @UseGuards(AuthGuard)

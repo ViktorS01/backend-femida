@@ -1,3 +1,4 @@
+import { SubdivisionService } from '../subdivision/subdivision.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
@@ -12,7 +13,8 @@ import {
   HalfYearAssessmentListDTO,
 } from './dto/types';
 import { getCurrentAssessment } from '../utils/getCurrentAssessment';
-import { SubdivisionService } from '../subdivision/subdivision.service';
+import { Comment, Entity } from './dto/types';
+import { Subdivision } from 'src/typeorm/entities/subdivision.entity';
 
 @Injectable()
 export class AssessmentService {
@@ -32,10 +34,37 @@ export class AssessmentService {
     return this.assessmentRepository.findOneBy({ id });
   }
 
+  async getCommentsById(id: number, entity: Entity): Promise<Comment[]> {
+    let assessments: Assessment[];
+    if (entity === 'employee') {
+      assessments = await this.assessmentRepository.findBy({
+        idToEmployee: id,
+      });
+    } else {
+      assessments = await this.assessmentRepository.findBy({
+        idToSubdivision: id,
+      });
+    }
+
+    const comments: Comment[] = [];
+
+    for (const assessment of assessments) {
+      const subdivision: Subdivision = await this.subdivisionService.findOne(
+        Number(assessment.idFromSubdivision),
+      );
+      comments.push({
+        ...assessment,
+        currentAssessment: getCurrentAssessment([assessment]),
+        subdivisionName: subdivision.name,
+      });
+    }
+    return comments;
+  }
+
   async findHalfYearAssessments(
     id: number,
     criteria = 1,
-    entity: 'employee' | 'subdivision',
+    entity: Entity,
   ): Promise<HalfYearAssessmentListDTO[]> {
     let assessments: Assessment[];
     if (entity === 'employee') {
@@ -70,7 +99,9 @@ export class AssessmentService {
     });
   }
 
-  async findFunctionAssessmentList(username: string): Promise<any> {
+  async findFunctionAssessmentList(
+    username: string,
+  ): Promise<AssessmentsFromSubdivision[]> {
     const user = await this.usersService.findOne(username);
 
     if (!user?.userId) {
