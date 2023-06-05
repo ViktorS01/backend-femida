@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { Assessment } from './typeorm/entities/assessment.entity';
 import { AssessmentModule } from './assessment/assessment.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AssessmentModule } from './assessment/assessment.module';
     AuthModule,
     UsersModule,
     AssessmentModule,
+    ImageModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',

@@ -77,6 +77,15 @@ export class Employee {
   @Column({ nullable: true })
   assessmentsCount: number;
 
+  @Column({ nullable: true })
+  avatarImage: string;
+
+  @Column({ nullable: true })
+  cardImage: string;
+
+  @Column({ nullable: true })
+  profileImage: string;
+
   @ManyToMany(() => Subdivision)
   @JoinColumn()
   subdivision: Subdivision;
