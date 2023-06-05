@@ -11,17 +11,17 @@ export class UsersService {
   private readonly users = [
     {
       userId: 1,
-      username: 'a@b.ccc',
+      username: 'a@test.com',
       password: 'rootroot',
     },
     {
       userId: 2,
-      username: 'a@b.ccc',
+      username: 'b@test.com',
       password: 'rootroot',
     },
     {
       userId: 3,
-      username: 'a@b.ccc',
+      username: 'c@test.com',
       password: 'rootroot',
     },
   ];
