@@ -58,7 +58,6 @@ export class ImageController {
     }),
   )
   uploadCard(@UploadedFile() file, @Request() req) {
-    console.log(file);
     this.imageService.uploadCard(file.filename, req.user.username);
   }
 
