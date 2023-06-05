@@ -14,6 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageService } from './image.service';
 import { diskStorage } from 'multer';
 import { AuthGuard } from '../auth/auth.guard';
+import { Public } from '../auth/constants';
 
 @ApiBearerAuth()
 @Controller('image')
@@ -81,6 +82,7 @@ export class ImageController {
     this.imageService.uploadProfile(file.filename, req.user.username);
   }
 
+  @Public()
   @Get('avatars/:fileId')
   async serveAvatar(@Param('fileId') fileId, @Res() res): Promise<any> {
     res.sendFile(fileId, { root: 'files' });
