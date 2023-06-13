@@ -40,4 +40,7 @@ export class Assessment {
 
   @Column({ nullable: true })
   createdAt: Date;
+
+  @Column({ nullable: true, type: 'float' })
+  squareDiviation: number;
 }

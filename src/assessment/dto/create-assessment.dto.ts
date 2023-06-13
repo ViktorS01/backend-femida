@@ -12,4 +12,5 @@ export class CreateAssessmentDto {
   readonly teamWork: number;
   readonly respect: number;
   readonly createdAt?: Date;
+  readonly squareDiviation?: number;
 }

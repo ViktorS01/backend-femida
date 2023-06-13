@@ -35,7 +35,10 @@ export class EmployeeService {
   }
 
   async findAllDivergences() {
-    const res: (Employee & { fromAverageAssessment: number })[] = [];
+    const res: (Employee & {
+      fromAverageAssessment: number;
+      averageSquareDiviation: number;
+    })[] = [];
     const allAssessmentsEmployee: Record<string, Assessment[]> = {};
     const assessments: Assessment[] = await this.assessmentRepository.find();
     assessments.forEach((item) => {
@@ -48,9 +51,25 @@ export class EmployeeService {
     });
     for (const key in allAssessmentsEmployee) {
       const divergense = getCurrentAssessment(allAssessmentsEmployee[key]);
-      if (divergense > 4.5 || divergense < 3) {
+      const arraySquare = [];
+      allAssessmentsEmployee[key].forEach((item) => {
+        if (item?.squareDiviation) {
+          console.log(item?.squareDiviation);
+          arraySquare.push(item?.squareDiviation);
+        }
+      });
+      const averageSquareDiviation = arraySquare.length
+        ? arraySquare.reduce((prev, current) => prev + current, 0) /
+          arraySquare.length
+        : null;
+
+      if (divergense > 4.5 || divergense < 3 || averageSquareDiviation <= 0.5) {
         const employee = await this.findOne(Number(key));
-        res.push({ ...employee, fromAverageAssessment: divergense });
+        res.push({
+          ...employee,
+          fromAverageAssessment: divergense,
+          averageSquareDiviation,
+        });
       }
     }
     return res;

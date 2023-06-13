@@ -15,6 +15,7 @@ import {
 import { getCurrentAssessment } from '../utils/getCurrentAssessment';
 import { Comment, Entity } from './dto/types';
 import { Subdivision } from 'src/typeorm/entities/subdivision.entity';
+import { getSquareDiviation } from '../utils/getSquareDiviation';
 
 @Injectable()
 export class AssessmentService {
@@ -166,12 +167,24 @@ export class AssessmentService {
       assessmentDto.idToEmployee,
     );
 
+    const criteriasArray: number[] = [
+      assessmentDto.respect,
+      assessmentDto.resultWork,
+      assessmentDto.qualityWork,
+      assessmentDto.teamWork,
+      assessmentDto.information,
+      assessmentDto.speed,
+    ];
+
+    const squareDiviation = getSquareDiviation(criteriasArray);
+
     const newAssessment = await this.assessmentRepository.create({
       ...assessmentDto,
       idFromEmployee: user.userId,
       createdAt: new Date(),
       idFromSubdivision: fromEmployee.subdivision.id,
       idToSubdivision: toEmployee.subdivision.id,
+      squareDiviation: squareDiviation,
     });
 
     return await this.assessmentRepository.save(newAssessment);
