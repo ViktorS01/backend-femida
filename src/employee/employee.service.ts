@@ -34,6 +34,28 @@ export class EmployeeService {
     return res;
   }
 
+  async findAllDivergences() {
+    const res: (Employee & { fromAverageAssessment: number })[] = [];
+    const allAssessmentsEmployee: Record<string, Assessment[]> = {};
+    const assessments: Assessment[] = await this.assessmentRepository.find();
+    assessments.forEach((item) => {
+      if (allAssessmentsEmployee[item.idFromEmployee]) {
+        allAssessmentsEmployee[item.idFromEmployee].push(item);
+      } else {
+        allAssessmentsEmployee[item.idFromEmployee] = [];
+        allAssessmentsEmployee[item.idFromEmployee].push(item);
+      }
+    });
+    for (const key in allAssessmentsEmployee) {
+      const divergense = getCurrentAssessment(allAssessmentsEmployee[key]);
+      if (divergense > 4.5 || divergense < 3) {
+        const employee = await this.findOne(Number(key));
+        res.push({ ...employee, fromAverageAssessment: divergense });
+      }
+    }
+    return res;
+  }
+
   async search(username?: string, search?: string): Promise<Employee[]> {
     const employees: Employee[] = await this.usersRepository.find();
     const user = await this.usersService.findOne(username);

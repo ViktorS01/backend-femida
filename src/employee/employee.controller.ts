@@ -36,6 +36,12 @@ export class EmployeeController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('/divergences')
+  getDivergences() {
+    return this.employeeService.findAllDivergences();
+  }
+
+  @UseGuards(AuthGuard)
   @Get('/recommendation')
   async getRecommendation(@Request() req) {
     const employees: Employee[] = await this.employeeService.reccomendation(
