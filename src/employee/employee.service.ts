@@ -54,7 +54,6 @@ export class EmployeeService {
       const arraySquare = [];
       allAssessmentsEmployee[key].forEach((item) => {
         if (item?.squareDiviation) {
-          console.log(item?.squareDiviation);
           arraySquare.push(item?.squareDiviation);
         }
       });
