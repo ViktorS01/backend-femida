@@ -53,7 +53,7 @@ export class EmployeeService {
       const divergense = getCurrentAssessment(allAssessmentsEmployee[key]);
       const arraySquare = [];
       allAssessmentsEmployee[key].forEach((item) => {
-        if (item?.squareDiviation) {
+        if (typeof item?.squareDiviation === 'number') {
           arraySquare.push(item?.squareDiviation);
         }
       });
@@ -62,7 +62,11 @@ export class EmployeeService {
           arraySquare.length
         : null;
 
-      if (divergense > 4.5 || divergense < 3 || averageSquareDiviation <= 0.5) {
+      if (
+        divergense > 4.5 ||
+        divergense < 3 ||
+        (averageSquareDiviation <= 0.5 && averageSquareDiviation !== null)
+      ) {
         const employee = await this.findOne(Number(key));
         res.push({
           ...employee,
